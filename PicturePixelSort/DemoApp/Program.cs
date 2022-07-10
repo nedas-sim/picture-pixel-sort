@@ -34,6 +34,8 @@ public class Program
         {
             for (int sortingImageSize = 10; sortingImageSize <= Math.Min(width, height); sortingImageSize += 10)
             {
+                Console.WriteLine($"Sorting image portion {sortingImageSize}:{sortingImageSize}");
+
                 fs.Seek(0, SeekOrigin.Begin);
                 ArrayRAM<byte> imageDataArray = new((int)fs.Length);
                 fs.Read(imageDataArray.GetArray(), 0, (int)fs.Length);
@@ -58,8 +60,40 @@ public class Program
                     }
                 }
 
+                sortingArray.MergeSort();
+                sortingArray.Reshuffle(sortingImageSize, sortingImageSize);
+                sortingArray.TurnUpsideDown(sortingImageSize, sortingImageSize);
 
+                imageSeekPointer = _bmpMetadataOffset;
+                int m = 0;
+                for (int i = 0; i < sortingImageSize; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        if (j < sortingImageSize)
+                        {
+                            byte[] pixelBytes = BitConverter.GetBytes(sortingArray.Get(m));
+
+                            imageDataArray.Replace(imageSeekPointer, pixelBytes[0]);
+                            imageDataArray.Replace(imageSeekPointer + 1, pixelBytes[1]);
+                            imageDataArray.Replace(imageSeekPointer + 2, pixelBytes[2]);
+
+                            m++;
+                        }
+
+                        imageSeekPointer += 3;
+                    }
+                }
+
+                string sortedFileName = GetSortedImageFileName(fileName, sortingImageSize);
+                using (FileStream sortedFs = new(sortedFileName, FileMode.Create, FileAccess.Write))
+                {
+                    sortedFs.Seek(0, SeekOrigin.Begin);
+                    sortedFs.Write(imageDataArray.GetArray(), 0, imageDataArray.Size());
+                    sortedFs.Close();
+                }
             }
+            fs.Close();
         }
 
         Console.WriteLine("End of program");
@@ -129,6 +163,16 @@ public class Program
         string saveImagePath = Path.Combine(_outputDirectory, Path.GetFileNameWithoutExtension(fileName)) + ".bmp";
         image.Save(saveImagePath, ImageFormat.Bmp);
         return (image.Width, image.Height, saveImagePath);
+    }
+    #endregion
+
+    #region string GetSortedImageFileName(string fileName, int sortedPortionSize)
+    static string GetSortedImageFileName(string fileName, int sortedPortionSize)
+    {
+        fileName = Path.GetFileNameWithoutExtension(fileName);
+        fileName = $"{fileName}_{sortedPortionSize}_Sorted";
+        fileName = Path.Combine(_outputDirectory, fileName) + ".bmp";
+        return fileName;
     }
     #endregion
 }

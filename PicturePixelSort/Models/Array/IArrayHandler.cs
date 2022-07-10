@@ -1,6 +1,6 @@
 ﻿namespace Models.Array;
 
-public interface IArrayHandler<T>
+public interface IArrayHandler<T> where T : IComparable
 {
     void Add(T data);
     T Get(int index);
