@@ -3,4 +3,5 @@
     <File Path="readme.md" />
   </Folder>
   <Project Path="MergeSortArray/MergeSortArray.csproj" />
+  <Project Path="MergeSortLinkedList/MergeSortLinkedList.csproj" Id="14812a5c-928b-47af-806f-f4615c3ffd80" />
 </Solution>

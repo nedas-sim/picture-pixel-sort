@@ -13,3 +13,7 @@
 ## Merge sort (in-memory, array)
 
 - Same code runs 5 times faster
+
+## Merge sort (in-memory, linked list)
+
+- Same code runs ~3 times faster
