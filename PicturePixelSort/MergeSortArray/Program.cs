@@ -15,7 +15,7 @@ void Main()
     Delete();
 
     string dir = "..\\..\\..\\nuotraukosInput\\";
-
+    
     string file1 = Directory.GetFiles(dir, "*.jpg")[0];
 
     Console.WriteLine("Failas: " + file1);
