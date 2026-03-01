@@ -17,3 +17,11 @@
 ## Merge sort (in-memory, linked list)
 
 - Same code runs ~3 times faster
+
+## Merge sort (file system, array)
+
+- Crashes because of incorrect opening and closing of files
+
+## Merge sort (file system, linked list)
+
+- Crashes because of incorrect opening and closing of files
